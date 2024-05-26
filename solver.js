@@ -3,7 +3,7 @@ const Table = require("./table.js")
 table = new Table
 
 //Example table
-table[0][1] = 7
+/* table[0][1] = 7
 table[0][2] = 1
 table[0][6] = 4
 table[0][7] = 3
@@ -36,8 +36,26 @@ table[8][1] = 3
 table[8][2] = 2
 table[8][3] = 4
 table[8][6] = 8
-table[8][7] = 7
+table[8][7] = 7 */
 
+table[0][0] = 7
+table[0][2] = 8
+table[0][6] = 3
+table[1][3] = 2
+table[1][5] = 1
+table[2][0] = 5
+table[3][1] = 4
+table[3][7] = 2
+table[3][8] = 6
+table[4][0] = 3
+table[4][4] = 8
+table[5][3] = 1
+table[5][7] = 9
+table[6][1] = 9
+table[6][3] = 6
+table[6][8] = 4
+table[7][4] = 7
+table[7][6] = 5
 
 function solve(table) {
 
@@ -48,31 +66,40 @@ function solve(table) {
             }
         }
     }
-    //console.log(table)
-    let count = -1
+    
     while (true) {
-        count++
-        console.log(table.move_count)
         const coords = table.find_min()
-        const row = coords[0]
-        const col = coords[1]
+        let row = coords[0]
+        let col = coords[1]
         if (row == -1) return;
-        table.history.push({
-            "possible": new Array,
-            "original": []
-        })
         table.move_count++
-        table.history[table.move_count].original = table[row][col].slice()
+        if (table.history.length == table.move_count) {
+            table.history.push({
+                "possible": new Array,
+                "original": table[row][col].slice()
+            })
+        }
         const n = table[row][col][0]
         table.place(n, row, col)
 
         if (table.is_impossible()) {
-            table.revert()
+            const undone = table.revert()
+            row = undone[0]
+            col = undone[1]
             table.move_count--
-            if (table[row][col].length == 0) {
+            while (table[row][col].length == 0) {
                 table[row][col] = table.history[table.move_count+1].original
                 table.history.pop()
-                table.revert()
+                const move = table.revert()
+                row = move[0]
+                col = move[1]
+                for (let i = 0; i < 9; i++) {
+                    for (let j = 0; j < 9; j++) {
+                        if (typeof(table[j][i]) == "number") {
+                            table.adjust_table(j, i)
+                        }
+                    }
+                }
                 table.move_count--
             }
         }

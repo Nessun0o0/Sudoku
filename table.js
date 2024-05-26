@@ -42,7 +42,6 @@ function Table () {
     
     arr.revert = () => {
         let move = arr.history[arr.move_count].possible.pop()
-        console.log(move)
         let n = move[1]
         let row = move[2]
         let col = move[3]
@@ -62,6 +61,7 @@ function Table () {
         }
 
         arr[row][col] = move[0]
+        return [row, col]
     }
 
     arr.adjust_table = (row, col) => {
@@ -100,7 +100,6 @@ function Table () {
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
                 if (typeof(arr[i][j]) != "number" && arr[i][j].length == 0) {
-                    console.log(i, j)
                     return true
                 }
             }
