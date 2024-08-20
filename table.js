@@ -70,16 +70,21 @@ function Table () {
         for (let i = 0; i < 9; i++) {
             if (i != row) {
                 swap_del(arr[i][col], n)
+                if (arr[i][col] == n) return -1;
             }
             if (i != col) {
                 swap_del(arr[row][i], n)
+                if (arr[row][i] == n) return -1;
             }
             let row_s = 3*Math.floor(row/3) + i%3
             let col_s = 3*Math.floor(col/3) + Math.floor(i/3)
             if (col_s != col && row_s != row) {
                 swap_del(arr[row_s][col_s], n)
+                if (arr[row_s][col_s] == n) return -1;
             }
         }
+
+        return 1
     }
 
     arr.find_min = () => {
@@ -110,4 +115,30 @@ function Table () {
     return arr
 }
 
-module.exports = Table
+function clone_table(table) {
+    let temp = new Table()
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            if (typeof(table[i][j]) != "number") {
+                temp[i][j] = table[i][j].slice()
+            } else {
+                temp[i][j] = table[i][j]
+            }
+        }
+    }
+    return temp
+}
+
+function test_table(table) {
+    let string = ""
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            if (typeof(table[i][j]) == "number") {
+                string += `table[${i}][${j}] = ${table[i][j]}\n`
+            }
+        }
+    }
+    console.log(string)
+}
+
+//module.exports = Table

@@ -1,3 +1,7 @@
+/* Table = require("./table")
+solve = require("./solver.js") */
+
+table = new Table
 
 let rand = (n) => {
     return Math.floor(Math.random() * n)
@@ -43,14 +47,7 @@ function is_tile_free(table, r, c) {
     }
 }
 
-//let squares_index = [[[],[],[]],[[],[],[]],[[],[],[]]]
-let squares_index = [[],[],[],[],[],[],[],[],[]]
-let table = [[],[],[],[],[],[],[],[],[]]
-let full_cell = [1,2,3,4,5,6,7,8,9]
-
-let numbers = {}
-
-function prepare_table() {
+/* function prepare_table() {
     
     // Generate map to find the index of the 3x3 square
     for (i = 0; i < 9; i++) {
@@ -69,7 +66,7 @@ function prepare_table() {
 
 
     fill(table)
-}
+} */
 
 
 
@@ -168,6 +165,22 @@ function print_table(table) {
         }
         console.log(output)
     }
+}
+
+function generate_sudoku(table) {
+    let free_cells = []
+    for (let i = 0; i < 9; i++) {
+        for (j = 0; j < 9; j++) {
+            free_cells.push([j,i])
+        }
+    }
+    
+    while (placed < 81) {
+        const cell = free_cells[rand(free_cells.length)]
+        const row = cell[0]; const col = cell[1];
+        const n = table[row][col][rand(table[row][col].length)]    
+    }
+
 }
 
 /* prepare_table()
