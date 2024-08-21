@@ -88,7 +88,7 @@ function Table () {
     }
 
     arr.find_min = () => {
-        let min = 10
+        let min = 16
         let coords = [-1, -1]
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
@@ -104,7 +104,7 @@ function Table () {
     arr.is_impossible = () => {
         for (let i = 0; i < 9; i++) {
             for (let j = 0; j < 9; j++) {
-                if (typeof(arr[i][j]) != "number" && arr[i][j].length == 0) {
+                if (arr[i][j] == null || (typeof(arr[i][j]) != "number" && arr[i][j].length == 0)) {
                     return true
                 }
             }
@@ -134,11 +134,13 @@ function test_table(table) {
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
             if (typeof(table[i][j]) == "number") {
-                string += `table[${i}][${j}] = ${table[i][j]}\n`
+                //string += `table[${i}][${j}] = ${table[i][j]}\n`
+                string += `${table[i][j]}`
+            }
+            else {
+                string += "."
             }
         }
     }
     console.log(string)
 }
-
-//module.exports = Table
