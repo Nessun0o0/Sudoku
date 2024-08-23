@@ -48,6 +48,7 @@
             const rect = canvas.getBoundingClientRect();
             const col = Math.floor(9*(event.clientX - rect.left)/rect.height);
             const row = Math.floor(9*(event.clientY - rect.top)/rect.width);
+            if (table[row].custom[col] != 1) return;
             if (selected == 0) {
                 table[row][col] = [1,2,3,4,5,6,7,8,9].slice()
             } else {
