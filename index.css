@@ -1,21 +1,51 @@
 body {
-    overflow: hidden;
+    /* overflow: hidden; */
+    width: 100vw;
+    height: 100vh;
+}
+
+.main {
+    display: flex;
 }
 
 .container {
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    overflow: hidden;
+    /*float: right;*/
+    padding-left: 8vw;
+    justify-items: center;
+    align-items: center;
+    justify-self: center;
+    align-self: center;
 }
 
+@media handheld, only screen and (max-width:900px){
+
+    .main {
+        flex-wrap: wrap;
+    }
+
+    .container {
+        padding-left: 0;
+        padding-top: 30px;
+    }
+}
+
+/* #sudokuCanvas {
+    display: block;
+    width: 95%;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+} */
+
 #sudokuCanvas {
-    height: 95%;
+    align-self: center;
+    float: left;
 }
 
 .buttons {
+    justify-self: right;
     display: flex;
-    width: 100%;
     align-items: center;
     align-content: center;
     justify-content: center;

@@ -27,7 +27,7 @@ function fill_random(table) {
     }
 
     let operations = 0
-    while (operations <= 15 && !has_single_solution(table)) {
+    while (!has_single_solution(table)) {
         const cell = free_cells[rand(free_cells.length)]
         const row = cell[0]; const col = cell[1];
         swap_del(free_cells, cell)
@@ -47,9 +47,14 @@ function fill_random(table) {
                 swap_del(table[row][col], n)
             }
         }
+
+        if (operations > 15) {
+            solve(table)
+            hide_cells(table)
+            return
+        }
     }
-    solve(table)
-    console.log(operations)
+    //solve(table)
     return
 
 }
@@ -90,6 +95,5 @@ function hide_cells(table) {
 
 function generate(table) {
     fill_random(table)
-    hide_cells(table)
     draw()
 }

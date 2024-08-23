@@ -3,14 +3,15 @@
 <head>
     <title>Sudoku</title>
     <link rel="stylesheet" href="index.css">
-    <!-- <script type="module" src="generator.js"></script> -->
     <script  src="./table.js"></script>
     <script  src="./solver.js"></script>
     <script  src="./generator.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 </head>
 <body>
+    <div class="main">
+    <canvas id="sudokuCanvas"></canvas> 
     <div class='container'>
-        <canvas id="sudokuCanvas" width="900" height="900"></canvas>
         <div class="buttons">
             <div class="numbers">
             <button class="number" onclick="(() => {selected = 1;})()">1</button>
@@ -23,13 +24,11 @@
             <button class="number" onclick="(() => {selected = 8;})()">8</button>
             <button class="number" onclick="(() => {selected = 9;})()">9</button>
             <button class="number" onclick="(() => {selected = 0;})()">X</button>
-            
             <div style="padding-top: 20px;text-align: center; ">
                 <button class="solve" onclick="(() => {console.log(solve(table));draw();})()">Solve!</button>
                 <button class="solve" onclick="(() => {generate(table);draw();})()">Generate</button>
             </div>
-        
-        
+    </div>
     </div>
     <script>
         function log(table) {
@@ -59,23 +58,23 @@
         let selected = 0
         const canvas = document.getElementById("sudokuCanvas");
         const ctx = canvas.getContext("2d");
-        console.log(canvas.width)
         let table = new Table()
 
         function draw() {
             ctx.fillStyle = "#FFFFFF";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            line_width = Math.ceil(canvas.width / 450)
 
             ctx.fillStyle = "#000000";
-            ctx.lineWidth = 2;
+            ctx.lineWidth = line_width;
 
             let counter = 0
 
-            for (let x = 0; x <= canvas.width; x += canvas.width / 9) {
+            for (let x = 0; x <= canvas.width; x += Math.floor(canvas.width / 9)) {
                 if (counter%3 == 0) {
-                    ctx.lineWidth = 6
+                    ctx.lineWidth = line_width * 3
                 } else {
-                    ctx.lineWidth = 2
+                    ctx.lineWidth = line_width
                 }
                 ctx.beginPath();
                 ctx.moveTo(x, 0);
@@ -86,11 +85,11 @@
 
             counter = 0
 
-            for (let y = 0; y <= canvas.height; y += canvas.height / 9) {
+            for (let y = 0; y <= canvas.height; y += Math.floor(canvas.height / 9)) {
                 if (counter%3 == 0) {
-                    ctx.lineWidth = 6
+                    ctx.lineWidth = line_width * 3
                 } else {
-                    ctx.lineWidth = 2
+                    ctx.lineWidth = line_width
                 }
                 ctx.beginPath();
                 ctx.moveTo(0, y);
@@ -99,7 +98,7 @@
                 counter++
             }
 
-            ctx.font = "20px Arial";
+            ctx.font = canvas.width/30 + "px Arial";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
             ctx.fillStyle = "#000000";
@@ -111,17 +110,35 @@
                 for (let col = 0; col < 9; col++) {
                     const number = table[row][col];
                     if (typeof(number) == "number") {
-                        const x = col * cellSize + cellSize / 2;
-                        const y = row * cellSize + cellSize / 2;
+                        const x = Math.floor(col * cellSize + cellSize / 2);
+                        const y = Math.floor(row * cellSize + cellSize / 2);
                         ctx.fillText(number, x, y);
                         count++
                     }
                 }
             }
         }
-        draw()
+
+        function resize() {
+            let width = window.innerWidth * 0.96;
+            let height = window.innerHeight * 0.96;
+            width -= width % 9
+            height -= height % 9
+            if (width < height) {
+                canvas.height = width 
+                canvas.width = width
+            } else {
+                canvas.width = height
+                canvas.height = height
+            }
+            draw()
+        }
+        
+        resize()
+        
         document.addEventListener("click", draw)
         canvas.addEventListener("mousedown", (e) => {getMousePosition(canvas, e)})
+        window.addEventListener("resize", resize)
     </script>
 </body>
 </html>
