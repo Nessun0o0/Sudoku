@@ -2,6 +2,13 @@ let rand = (n) => {
     return Math.floor(Math.random() * n)
 }
 
+function shuffleArray(array) {
+    for (i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
 function place_number(table, n, row, col) {
     for (let i = 0; i < 9; i++) {
         if (i != row) {
@@ -18,7 +25,7 @@ function place_number(table, n, row, col) {
     }
 }
 
-function fill_random(table) {
+function fill_random(table, easy) {
     let free_cells = []
     for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
@@ -50,13 +57,18 @@ function fill_random(table) {
 
         if (operations > 15) {
             solve(table)
-            hide_cells(table)
+            if (!easy) hide_cells(table)
+            table.history = []
+            table.move_count = -1
             return
         }
     }
-    //solve(table)
+    if (easy) {
+        solve(table)
+        table.history = []
+        table.move_count = -1
+    }
     return
-
 }
 
 function hide_cells(table) {
@@ -93,7 +105,58 @@ function hide_cells(table) {
     }
 }
 
-function generate(table) {
-    fill_random(table)
+function easy_hide_cells(table) {
+    let filled_cells = []
+    for (let i = 0; i < 9; i++) {
+        for (j = 0; j < 9; j++) {
+            filled_cells.push([j,i])
+        }
+    }
+
+    let stop = false
+    while(!stop) {
+        const cell = filled_cells[rand(filled_cells.length)]
+        const row = cell[0]; const col = cell[1];
+        swap_del(filled_cells, cell)
+        let temp = clone_table(table)
+
+        temp[row][col] = [1,2,3,4,5,6,7,8,9].slice()
+        solve(temp)
+        
+        for (let i = 0; i < temp.history.length; i++) {
+            if (temp.history[i].original.length != 1) {
+                stop = true
+                break
+            }
+        }
+
+        if (!stop) table[row][col] = [1,2,3,4,5,6,7,8,9].slice()
+    }
+
+    shuffleArray(filled_cells)
+    
+    for (let i = 0; i < filled_cells.length; i++) {
+        stop = false
+        const row = filled_cells[i][0]
+        const col = filled_cells[i][1]
+        let temp = clone_table(table)
+
+        temp[row][col] = [1,2,3,4,5,6,7,8,9].slice()
+        solve(temp)
+        
+        for (let i = 0; i < temp.history.length; i++) {
+            if (temp.history[i].original.length != 1) {
+                stop = true
+                break
+            }
+        }
+
+        if (!stop) table[row][col] = [1,2,3,4,5,6,7,8,9].slice()
+    }
+}
+
+function generate(table, easy) {
+    fill_random(table, easy)
+    if (easy) easy_hide_cells(table)
     draw()
 }
