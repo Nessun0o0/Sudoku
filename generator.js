@@ -158,5 +158,12 @@ function easy_hide_cells(table) {
 function generate(table, easy) {
     fill_random(table, easy)
     if (easy) easy_hide_cells(table)
+    for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+            if (typeof(table[i][j]) == "number") {
+                table[i].custom[j] = 0
+            }
+        }
+    }
     draw()
 }
